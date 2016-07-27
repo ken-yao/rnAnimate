@@ -1,52 +1,97 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { AppRegistry, StyleSheet, Text, View, TouchableHighlight, Navigator, DrawerLayoutAndroid} from 'react-native';
+
+import LayoutAnimationPage from './Page/LayoutAnimationPage';
+import AnimatedPage from './Page/AnimatedPage';
+import TestPageOne from './Page/TestPageOne';
+import TestPageTwo from './Page/TestPageTwo';
+import TestPageThree from './Page/TestPageThree';
+import TestPageFour from './Page/TestPageFour';
 
 class rnAnimate extends Component {
+  constructor(props){
+    super(props);
+  }
+
+  openDrawer(){
+      this.refs['DRAWER'].openDrawer();
+  };
+
+  closeDrawer(){
+      this.refs['DRAWER'].closeDrawer();
+  }
+
+  goTo(n) {
+      nav.push({
+          id: n.id,
+      });
+      this.closeDrawer();
+  }
+
+  renderScene(route, nav) {
+    switch (route.id){
+        case 'LayoutAnimationPage':
+            return (<LayoutAnimationPage navigator={nav} {...this.props} {...route.passProps} goTo={this.goTo.bind(this)} />);
+            break;
+        case 'AnimatedPage':
+            return (<AnimatedPage navigator={nav} {...this.props} {...route.passProps} goTo={this.goTo.bind(this)} />);
+            break;
+        case 'TestPageOne':
+            return (<TestPageOne navigator={nav} {...this.props} {...route.passProps} />);
+            break;
+        case 'TestPageTwo':
+            return (<TestPageTwo navigator={nav} {...this.props} {...route.passProps} />);
+            break;
+        case 'TestPageThree':
+            return (<TestPageThree navigator={nav} {...this.props} {...route.passProps} />);
+            break;
+        case 'TestPageFour':
+            return (<TestPageFour navigator={nav} {...this.props} {...route.passProps} />);
+            break;
+    }
+}
+
   render() {
+    var navigationView = (
+          <View style={styles.container}>
+              <Text style={styles.menuTitle}>React Native Animate</Text>
+              <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'LayoutAnimationPage'})}><Text style={styles.menuItem}>LayoutAnimationPage</Text></TouchableHighlight>
+              <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'AnimatedPage'})}><Text style={styles.menuItem}>AnimatedPage</Text></TouchableHighlight>
+              <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'TestPageOne'})}><Text style={styles.menuItem}>TestPageOne</Text></TouchableHighlight>
+              <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'TestPageTwo'})}><Text style={styles.menuItem}>TestPageTwo</Text></TouchableHighlight>
+          </View>
+    );
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <DrawerLayoutAndroid
+          ref={'DRAWER'}
+          drawerWidth={300}
+          drawerPosition={DrawerLayoutAndroid.positions.left}
+          renderNavigationView={() => navigationView}>
+
+          <View style={styles.container}>
+              <Navigator
+                  initialRoute={{id:'AnimatedPage'}}
+                  ref={((nav) => { global.nav = nav })}
+                  renderScene={this.renderScene.bind(this)}
+                  configureScene={(route) => {
+                      if (route.sceneConfig) {
+                        return route.sceneConfig;
+                      }
+                      return Navigator.SceneConfigs.FloatFromRight;
+                  }}
+              />
+          </View>
+      </DrawerLayoutAndroid>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  container:{flex:1},
+  menuTitle:{marginTop: 16, marginBottom:16, color:'#4f4f4f', fontSize: 20, textAlign: 'center' },
+  menuItem:{flex:1, alignItems:'center',justifyContent:'center', flexDirection:'column', margin:10},
+  menuText:{fontSize:18}
 });
 
 AppRegistry.registerComponent('rnAnimate', () => rnAnimate);
