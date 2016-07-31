@@ -3,6 +3,10 @@ import { AppRegistry, StyleSheet, Text, View, TouchableHighlight, Navigator, Dra
 
 import LayoutAnimationPage from './Page/LayoutAnimationPage';
 import AnimatedPage from './Page/AnimatedPage';
+import AnimatedTextPage from './Page/AnimatedTextPage';
+import AnimatedImagePage from './Page/AnimatedImagePage';
+import PositionAnimatedViewPage from './Page/PositionAnimatedViewPage';
+
 import TestPageOne from './Page/TestPageOne';
 import TestPageTwo from './Page/TestPageTwo';
 import TestPageThree from './Page/TestPageThree';
@@ -36,6 +40,15 @@ class rnAnimate extends Component {
         case 'AnimatedPage':
             return (<AnimatedPage navigator={nav} {...this.props} {...route.passProps} goTo={this.goTo.bind(this)} />);
             break;
+        case 'AnimatedTextPage':
+            return (<AnimatedTextPage navigator={nav} {...this.props} {...route.passProps} goTo={this.goTo.bind(this)} />);
+            break;
+        case 'AnimatedImagePage':
+            return (<AnimatedImagePage navigator={nav} {...this.props} {...route.passProps} goTo={this.goTo.bind(this)} />);
+            break;
+        case 'PositionAnimatedViewPage':
+            return (<PositionAnimatedViewPage navigator={nav} {...this.props} {...route.passProps} goTo={this.goTo.bind(this)} />);
+            break;
         case 'TestPageOne':
             return (<TestPageOne navigator={nav} {...this.props} {...route.passProps} />);
             break;
@@ -57,6 +70,9 @@ class rnAnimate extends Component {
               <Text style={styles.menuTitle}>React Native Animate</Text>
               <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'LayoutAnimationPage'})}><Text style={styles.menuItem}>LayoutAnimationPage</Text></TouchableHighlight>
               <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'AnimatedPage'})}><Text style={styles.menuItem}>AnimatedPage</Text></TouchableHighlight>
+              <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'AnimatedTextPage'})}><Text style={styles.menuItem}>AnimatedTextPage</Text></TouchableHighlight>
+              <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'AnimatedImagePage'})}><Text style={styles.menuItem}>AnimatedImagePage</Text></TouchableHighlight>
+              <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'PositionAnimatedViewPage'})}><Text style={styles.menuItem}>PositionAnimatedViewPage</Text></TouchableHighlight>
               <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'TestPageOne'})}><Text style={styles.menuItem}>TestPageOne</Text></TouchableHighlight>
               <TouchableHighlight underlayColor="#0a8acd" activeOpacity={1} onPress={() => this.goTo({id:'TestPageTwo'})}><Text style={styles.menuItem}>TestPageTwo</Text></TouchableHighlight>
           </View>
@@ -71,7 +87,7 @@ class rnAnimate extends Component {
 
           <View style={styles.container}>
               <Navigator
-                  initialRoute={{id:'AnimatedPage'}}
+                  initialRoute={{id:'PositionAnimatedViewPage'}}
                   ref={((nav) => { global.nav = nav })}
                   renderScene={this.renderScene.bind(this)}
                   configureScene={(route) => {

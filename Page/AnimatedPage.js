@@ -5,8 +5,50 @@ export default class AnimatedPage extends Component {
   constructor(props){
     super(props);
     this.state = {
-      fadeAnim: new Animated.value(0),
+      fadeAnim: new Animated.Value(0),
+      effectName: '效果',
+      currentOpacity: null,
+      errorInfo: null
     };
+  }
+
+  componentWillMount(){
+    this.animatedValue = new Animated.Value(1);
+    // console.log(typeof(this.animatedValue._value));
+  }
+
+  showOpacityEffect(){
+    if(this.animatedValue._value === 1){
+      this.setState({effectName: '渐隐效果'});
+      Animated.timing(
+        this.animatedValue,
+        {toValue: 0, duration: 1500}
+      ).start();
+    }else if(this.animatedValue._value === 0){
+      this.setState({effectName: '渐显效果'});
+      Animated.timing(
+        this.animatedValue,
+        {toValue: 1, duration: 1500}
+      ).start();
+    }
+
+    //添加Animated.Value值监听,以下两行效果一样，第一行指定一个监听ID，可以利用这个ID定位到该监听
+    // var animatedListenerId = this.animatedValue.addListener(({value}) => this.setState({currentOpacity: value}));
+    this.animatedValue.addListener(({value}) => this.setState({currentOpacity: value}));
+  }
+
+  setOpacity(){
+    if(this.animatedValue._value === 1){
+      this.animatedValue.setValue(0);
+    }else if(this.animatedValue._value === 0){
+      this.animatedValue.setValue(1);
+    }
+  }
+
+  stopAnimation(){
+    this.animatedValue.stopAnimation(({value}) => {
+      this.setState({errorInfo: '动画被人工停止了，当前值为：' + this.animatedValue._value});
+    });
   }
 
   componentDidMount(){
@@ -16,13 +58,40 @@ export default class AnimatedPage extends Component {
     ).start();
   }
 
+  componentWillUnmount(){
+    //移除Animated.Value值监听
+    // this.animatedValue.removeAllListeners(animatedListenerId);
+    //移动所有监听
+    this.animatedValue.removeAllListeners();
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Animated</Text>
-        <Animated.View style={styles.box}>
-            <Text style={styles.boxText}>dd</Text>
-        </Animated.View>
+        <View>
+          <Text style={styles.centerText}>页面进入自动调用动画</Text>
+          <Animated.View style={[styles.box, {opacity: this.state.fadeAnim}]}>
+              <Text style={styles.boxText}>渐显效果</Text>
+          </Animated.View>
+        </View>
+
+        <View style={styles.divider}></View>
+
+        <View>
+          <Animated.View style={[styles.box, {opacity: this.animatedValue}]}>
+              <Text style={styles.boxText}>{this.state.effectName}</Text>
+          </Animated.View>
+          <Text style={styles.centerText}>当前值：{this.state.currentOpacity}</Text>
+          <Text style={styles.centerText}>{this.state.errorInfo}</Text>
+          <View style={{flexDirection:'row'}}>
+            <TouchableHighlight underlayColor="#0a8acd" style={styles.btn} onPress={this.showOpacityEffect.bind(this)}><Text style={styles.btnTxt}>显示效果</Text></TouchableHighlight>
+            <TouchableHighlight underlayColor="#0a8acd" style={styles.btn} onPress={this.setOpacity.bind(this)}><Text style={styles.btnTxt}>直接显示/隐藏</Text></TouchableHighlight>
+            <TouchableHighlight underlayColor="#0a8acd" style={styles.btn} onPress={this.stopAnimation.bind(this)}><Text style={styles.btnTxt}>停止动画</Text></TouchableHighlight>
+          </View>
+        </View>
+
       </View>
     );
   }
