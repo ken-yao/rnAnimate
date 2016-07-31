@@ -3,7 +3,7 @@ import { StyleSheet, Text, View , Dimensions, TouchableHighlight, Image, Animate
 
 var {height, width} = Dimensions.get('window');
 
-export default class positionAnimatedViewPage extends Component {
+export default class GetLayoutPage extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -88,7 +88,6 @@ export default class positionAnimatedViewPage extends Component {
             <TouchableHighlight underlayColor="#0a8acd" style={styles.btn} onPress={() => this.moveBox('right')}><Text style={styles.btnTxt}>右</Text></TouchableHighlight>
           </View>
         </View>
-
 
       </View>
     );
